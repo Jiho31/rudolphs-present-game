@@ -1,8 +1,12 @@
 // import { AUTO, Game } from "phaser";
 import Phaser, { Game } from "phaser";
+import { Snow } from "./Snow.js";
+import { EventBus } from "./EventBus.js";
 
 // const GAME_PLAY_TIME = 30000; // 30 seconds
-const GAME_PLAY_TIME = 10000; // 10 seconds
+const GAME_PLAY_TIME = 5000; // 10 seconds
+const GAME_WIDTH = 365;
+const GAME_HEIGHT = 600;
 
 let player;
 let rudolph;
@@ -81,6 +85,7 @@ function startTimer() {
 }
 
 function preload() {
+    this.load.image("background", "assets/christmas-bg.jpg");
     this.load.image("sky", "assets/sky.png");
     this.load.image("ground", "assets/platform.png");
     this.load.image("star", "assets/star.png");
@@ -96,18 +101,24 @@ function preload() {
 }
 
 function create() {
-    this.add.image(400, 300, "sky");
+    // this.add.image(400, 300, "sky");
+    // this.add.image(182, GAME_HEIGHT / 2, "background");
+    this.make.image({
+        x: 182,
+        y: GAME_HEIGHT / 2 - 10,
+        key: "background",
+        scale: { x: 1.2, y: 1.2 },
+    });
 
     platforms = this.physics.add.staticGroup();
 
-    platforms.create(400, 568, "ground").setScale(2).refreshBody();
-
-    // platforms.create(600, 400, "ground");
-    // platforms.create(50, 250, "ground");
-    // platforms.create(750, 220, "ground");
+    // platforms.create(400, 568, "ground").setScale(2).refreshBody();
+    // platforms.create(400, 568, "ground").refreshBody();
+    platforms.create(182, GAME_HEIGHT - 15, "ground").refreshBody();
 
     // player = this.physics.add.sprite(100, 450, "dude");
     player = this.physics.add.sprite(100, 450, "rudolph");
+    player.setScale(0.7).refreshBody();
 
     // player.setBounce(0.2);
     player.setCollideWorldBounds(true);
@@ -144,13 +155,13 @@ function create() {
 
     stars = this.physics.add.group();
     starSpawnId = setInterval(
-        () => spawnStar(generateRandomInteger(10, 800)),
+        () => spawnStar(generateRandomInteger(10, GAME_WIDTH)),
         800
     );
 
     bombs = this.physics.add.group();
     bombSpawnId = setInterval(
-        () => spwanBomb(generateRandomInteger(10, 800)),
+        () => spwanBomb(generateRandomInteger(10, GAME_WIDTH)),
         1000
     );
 
@@ -215,8 +226,8 @@ function update() {
 
 const config: Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO,
-    width: 800,
-    height: 600,
+    width: GAME_WIDTH,
+    height: GAME_HEIGHT,
     parent: "game-container",
     backgroundColor: "#3366b2",
     physics: {
