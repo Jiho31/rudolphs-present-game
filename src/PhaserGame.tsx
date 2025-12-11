@@ -1,73 +1,85 @@
-import { forwardRef, useEffect, useLayoutEffect, useRef } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import StartGame from "./game/main";
 import { EventBus } from "./game/EventBus";
 
 export interface IRefPhaserGame {
-    game: Phaser.Game | null;
-    scene: Phaser.Scene | null;
+  game: Phaser.Game | null;
+  scene: Phaser.Scene | null;
 }
 
 interface IProps {
-    currentActiveScene?: (scene_instance: Phaser.Scene) => void;
+  currentActiveScene?: (scene_instance: Phaser.Scene) => void;
 }
 
 export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(
-    function PhaserGame({ currentActiveScene }, ref) {
-        const game = useRef<Phaser.Game | null>(null!);
+  function PhaserGame({ currentActiveScene }, ref) {
+    const game = useRef<Phaser.Game | null>(null!);
 
-        useLayoutEffect(() => {
-            if (game.current === null) {
-                game.current = StartGame("game-container");
+    const [items, setItems] = useState([]);
 
-                if (typeof ref === "function") {
-                    ref({ game: game.current, scene: null });
-                } else if (ref) {
-                    ref.current = { game: game.current, scene: null };
-                }
-            }
+    useLayoutEffect(() => {
+      if (game.current === null) {
+        game.current = StartGame("game-container");
 
-            return () => {
-                if (game.current) {
-                    game.current.destroy(true);
-                    if (game.current !== null) {
-                        game.current = null;
-                    }
-                }
-            };
-        }, [ref]);
+        if (typeof ref === "function") {
+          ref({ game: game.current, scene: null });
+        } else if (ref) {
+          ref.current = { game: game.current, scene: null };
+        }
+      }
 
-        useEffect(() => {
-            EventBus.on(
-                "current-scene-ready",
-                (scene_instance: Phaser.Scene) => {
-                    if (
-                        currentActiveScene &&
-                        typeof currentActiveScene === "function"
-                    ) {
-                        currentActiveScene(scene_instance);
-                    }
+      return () => {
+        if (game.current) {
+          game.current.destroy(true);
+          if (game.current !== null) {
+            game.current = null;
+          }
+        }
+      };
+    }, [ref]);
 
-                    if (typeof ref === "function") {
-                        ref({ game: game.current, scene: scene_instance });
-                    } else if (ref) {
-                        ref.current = {
-                            game: game.current,
-                            scene: scene_instance,
-                        };
-                    }
-                }
-            );
+    useEffect(() => {
+      EventBus.on("current-scene-ready", (scene_instance: Phaser.Scene) => {
+        if (currentActiveScene && typeof currentActiveScene === "function") {
+          currentActiveScene(scene_instance);
+        }
 
-            game.current.events.on("game-over", (data) => {
-                console.log(data.score, " ####### GAME OVER EVENT EMITTED!");
-            });
+        if (typeof ref === "function") {
+          ref({ game: game.current, scene: scene_instance });
+        } else if (ref) {
+          ref.current = {
+            game: game.current,
+            scene: scene_instance,
+          };
+        }
+      });
 
-            return () => {
-                EventBus.removeListener("current-scene-ready");
-                game.current.events.removeListener("game-over");
-            };
-        }, [currentActiveScene, ref]);
+      game.current.events.on("update-itemList", (data) => {
+        console.log(data);
+        setItems(data);
+      });
 
-        return <div id="game-container"></div>;
-    }
+      game.current.events.on("game-over", (data) => {
+        console.log(data.score, " ####### GAME OVER EVENT EMITTED!");
+      });
+
+      return () => {
+        EventBus.removeListener("current-scene-ready");
+        game.current.events.removeListener("game-over");
+      };
+    }, [currentActiveScene, ref]);
+
+    return (
+      <div>
+        <div id="game-container"></div>
+        <div>{items.join(",")}</div>
+      </div>
+    );
+  }
 );
