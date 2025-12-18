@@ -3,6 +3,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import type { GameInformation } from "@/types/types";
 import Image from "next/image";
 import { ItemKey, items } from "@/game/items";
+import Link from "next/link";
 
 type Props = {};
 
@@ -22,7 +23,7 @@ export default function ResultsPage({}: Props) {
         return;
       }
       const parsed = JSON.parse(data) as GameInformation;
-      console.log(parsed, "##########");
+      // console.log(parsed, "##########");
 
       resolve(parsed);
     });
@@ -115,22 +116,20 @@ export default function ResultsPage({}: Props) {
       </div>
 
       <div className="w-full">
-        <h2 className="text-xl font-semibold text-center">
+        {/* <h2 className="text-xl font-semibold text-center">
           {gameData.name || "User"}'s friends played:{" "}
-        </h2>
-        <h3 className="text-lg text-center text-green-500 font-semibold py-2">
+        </h2> */}
+        <h2 className="text-2xl text-center text-green-500 font-semibold py-3">
           SCORE BOARD
-        </h3>
-        <ul className="w-full flex flex-col gap-2">
+        </h2>
+        <ul className="w-full flex flex-col gap-2 p-2 rounded-2xl bg-gray-200/80 text-black">
           {/* make sure to render a ordered list */}
           {gameData.result.map((item, index) => {
             return (
               <li
                 key={index}
-                className={`inline-flex items-center py-2 px-4 rounded-2xl  ${
-                  index <= 2
-                    ? "font-bold bg-green-700"
-                    : " bg-green-100 text-black"
+                className={`inline-flex items-center py-2 px-4 rounded-2xl border-2 ${
+                  index <= 2 ? "font-bold border-green-700" : " border-gray-500"
                 }`}
               >
                 <span className="flex-1 mr-2">#{index + 1}</span>
@@ -142,6 +141,24 @@ export default function ResultsPage({}: Props) {
             );
           })}
         </ul>
+      </div>
+
+      <div className="w-full flex flex-col gap-2">
+        <Link
+          href={`/game?gameId=${gameId}`}
+          className="p-3 rounded-2xl bg-green-700 hover:bg-green-800 text-center font-semibold cursor-pointer"
+        >
+          Play Again
+        </Link>
+        <Link
+          href="/new-game"
+          className="p-3 rounded-2xl bg-green-700 hover:bg-green-800 text-center font-semibold cursor-pointer"
+        >
+          Create your own game
+        </Link>
+        <button className="p-3 rounded-2xl bg-green-700 hover:bg-green-800 text-center font-semibold cursor-pointer">
+          Share the result
+        </button>
       </div>
     </section>
   );
