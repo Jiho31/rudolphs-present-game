@@ -7,6 +7,7 @@ import {
 } from "react";
 import StartGame from "./game/main";
 import { EventBus } from "./game/EventBus";
+import { useRouter } from "next/router";
 
 export interface IRefPhaserGame {
   game: Phaser.Game | null;
@@ -26,6 +27,8 @@ export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(
     const [likedItems, setLikedItems] = useState([]);
     const [dislikedItems, setDislikedItems] = useState([]);
 
+    const router = useRouter();
+
     const saveGameResult = (score: number) => {
       const data = localStorage.getItem(gameId);
       if (!data) {
@@ -42,6 +45,10 @@ export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(
         gameId,
         JSON.stringify({ ...parsed, result: newResult })
       );
+    };
+
+    const handleRedirect = () => {
+      router.push(`/results?gameId=${gameId}`);
     };
 
     useLayoutEffect(() => {
@@ -97,6 +104,7 @@ export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(
           return;
         }
         saveGameResult(data.score);
+        handleRedirect();
       });
 
       return () => {
