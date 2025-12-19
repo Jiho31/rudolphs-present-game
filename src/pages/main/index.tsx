@@ -7,7 +7,13 @@ function MainPage({}: Props) {
   return (
     <section className="flex flex-col justify-center gap-5 w-[500px] h-dvh mx-auto">
       <h1 className="text-3xl font-bold underline">Rudolph's Game</h1>
-      <p>Make a game with your wishlist and share with your friends!</p>
+      <p>Welcome to Rudolph Game! 𐂂𐂂</p>
+      <p>Make a game with your wishlist and share with your friends.</p>
+      <p>
+        You will select items you would like and dislike for Christmas presents.
+        Your friends will then try to guess your wishlist by playing the game.
+      </p>
+      <p>Let's get started!</p>
 
       <div className="flex flex-col gap-5">
         <Link
