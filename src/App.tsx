@@ -13,6 +13,8 @@ function App() {
   const router = useRouter();
   const [isVisible, setIsVisible] = useState(false);
   const [gameId, setGameId] = useState("");
+  const [gameData, setGameData] = useState<any>({});
+  const [friendName, setFriendName] = useState("");
 
   //  References to the PhaserGame component (game and scene are exposed)
   const phaserRef = useRef<IRefPhaserGame | null>(null);
@@ -25,6 +27,12 @@ function App() {
       // @todo redirect to main page ? or play with default items mode
     }
   }, [router]);
+
+  useEffect(() => {
+    const gameData = fetchGameData(gameId);
+    setGameData(gameData);
+    setFriendName(gameData.name || "Friend");
+  }, [gameId]);
 
   const callGameover = () => {
     if (phaserRef.current) {
@@ -48,7 +56,9 @@ function App() {
   const fetchGameData = (gameId: string) => {
     if (!gameId) {
       // @todo handle game id invalid error
-      throw new Error("game id is invalid");
+      // throw new Error("game id is invalid");
+      console.error("game id is invalid");
+      return {};
     }
     const data = localStorage.getItem(gameId);
     if (!data) {
@@ -58,11 +68,9 @@ function App() {
   };
 
   const start = () => {
-    console.log(" START !!!!");
-
-    const gameData = fetchGameData(gameId);
-    // console.log(gameData);
+    // const gameData = fetchGameData(gameId);
     // { likes, dislikes, name }
+
     const likes = gameData.likes || [itemKeys.SNOWFLAKE];
     const dislikes = gameData.dislikes || ["bomb"];
 
@@ -113,6 +121,7 @@ function App() {
         ref={phaserRef}
         currentActiveScene={currentScene}
         gameId={gameId}
+        friendName={friendName}
       />
     </div>
   );
