@@ -2,7 +2,7 @@ import Link from "next/link";
 
 function MainPage() {
   return (
-    <section className="flex flex-col justify-center gap-5 w-9/10 sm:max-w-125 h-dvh mx-auto text-center">
+    <section className="flex flex-col justify-center gap-5 w-9/10 sm:max-w-125 h-dvh overflow-y-scroll py-10 mx-auto text-center">
       <h1 className="text-2xl font-extrabold text-green-600">
         Rudolph's Present Game 𐂂𐂂
       </h1>
@@ -20,7 +20,7 @@ function MainPage() {
       </p> */}
       <p>Let's get started!</p>
 
-      <div className="flex flex-col w-4/5 sm:w-full sm:flex-row gap-4 justify-center mx-auto">
+      <div className="sm:mt-5 flex flex-col w-4/5 sm:w-full sm:flex-row gap-4 justify-center mx-auto">
         <Link
           href="/new-game"
           className="sm:flex-1 p-5 rounded-2xl font-semibold bg-red-700 hover:bg-red-800 hover:cursor-pointer"
