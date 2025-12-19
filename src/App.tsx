@@ -6,10 +6,6 @@ import { MainMenu } from "./game/scenes/MainMenu";
 import { itemKeys } from "./game/items";
 
 function App() {
-  // The sprite can only be moved in the MainMenu Scene
-  const [canMoveSprite, setCanMoveSprite] = useState(true);
-  const [spritePosition, setSpritePosition] = useState({ x: 0, y: 0 });
-
   const router = useRouter();
   const [isVisible, setIsVisible] = useState(false);
   const [gameId, setGameId] = useState("");
@@ -34,24 +30,6 @@ function App() {
     setFriendName(gameData.name || "Friend");
   }, [gameId]);
 
-  const callGameover = () => {
-    if (phaserRef.current) {
-      const scene = phaserRef.current.scene as RudolphGame;
-      if (scene && scene.scene.key === "RudolphGame") {
-        scene.handleGameOver();
-      }
-    }
-  };
-
-  const spawnBeer = () => {
-    if (phaserRef.current) {
-      const scene = phaserRef.current.scene as RudolphGame;
-      if (scene && scene.scene.key === "RudolphGame") {
-        scene.spawnLikedItems(Math.floor(Math.random() * 300), ["beer"]);
-      }
-    }
-  };
-
   // local storage
   const fetchGameData = (gameId: string) => {
     if (!gameId) {
@@ -68,8 +46,7 @@ function App() {
   };
 
   const start = () => {
-    // const gameData = fetchGameData(gameId);
-    // { likes, dislikes, name }
+    // @todo handle invalid game data
 
     const likes = gameData.likes || [itemKeys.SNOWFLAKE];
     const dislikes = gameData.dislikes || ["bomb"];
@@ -87,27 +64,15 @@ function App() {
 
   // Event emitted from the PhaserGame component
   const currentScene = (scene: Phaser.Scene) => {
-    setCanMoveSprite(scene.scene.key !== "MainMenu");
-
     if (scene.scene.key === "RudolphGame") {
       setIsVisible(true);
     }
-    // setIsVisible(scene.scene.key === 'RudolphGame')
   };
 
   return (
     <div id="app">
       {isVisible && (
         <div className="absolute w-full h-full z-10 bg-black/50 flex justify-center items-center">
-          {/* <div>
-          <button className="button" onClick={callGameover}>
-            Trigger Game over
-          </button>
-        </div> */}
-          {/* <div className="spritePosition">
-          Sprite Position:
-          <pre>{`{\n  x: ${spritePosition.x}\n  y: ${spritePosition.y}\n}`}</pre>
-        </div> */}
           <button
             type="button"
             className="w-fit h-fit bg-black p-5 border hover:bg-gray-800 hover:cursor-pointer"
