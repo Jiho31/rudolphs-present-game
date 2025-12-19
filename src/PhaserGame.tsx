@@ -29,6 +29,7 @@ export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(
     const game = useRef<Phaser.Game | null>(null!);
     const [likedItems, setLikedItems] = useState([]);
     const [dislikedItems, setDislikedItems] = useState([]);
+    const [isGameOver, setIsGameOver] = useState(false);
 
     const router = useRouter();
 
@@ -107,7 +108,7 @@ export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(
           return;
         }
         saveGameResult(data.score);
-        handleRedirect();
+        setIsGameOver(true);
       });
 
       return () => {
@@ -122,6 +123,14 @@ export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(
         <div>💚 Likes: {likedItems.join(",")}</div>
         <div>💔 Dislikes: {dislikedItems.join(",")}</div>
         <div id="game-container"></div>
+        {isGameOver && (
+          <button
+            className="mt-3 p-2 rounded-xl bg-gray-200 hover:bg-green-200 text-green-700 cursor-pointer "
+            onClick={handleRedirect}
+          >
+            See Results
+          </button>
+        )}
       </div>
     );
   }
