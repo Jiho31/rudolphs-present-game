@@ -48,15 +48,39 @@ export default function ResultsPage({}: Props) {
   };
 
   useEffect(() => {
-    // if game id is valid
     if (!gameId || typeof gameId !== "string") {
       setGameData(undefined);
-      console.error("[Results Page] Invalid game id");
       return;
     }
 
     init(gameId);
   }, [gameId]);
+
+  const handleShareResult = () => {
+    const shareUrl = `${window.location.origin}/results?gameId=${gameId}`;
+    if (navigator.share) {
+      navigator
+        .share({
+          title: "Secret Rudolph Game Result",
+          text: `Check out the scoreboard for ${
+            gameData?.name || "a friend"
+          }'s game!`,
+          url: shareUrl,
+        })
+        .catch((error) => console.log("Error sharing", error));
+    } else {
+      // Fallback for browsers that do not support the Web Share API
+      navigator.clipboard.writeText(shareUrl).then(
+        () => {
+          alert("Share link copied to clipboard!");
+        },
+        (err) => {
+          console.error("Could not copy text: ", err);
+        }
+      );
+    }
+  };
+
   const handleGameCodeEnter = () => {
     const regex = /^[a-zA-Z0-9]{10}$/;
     if (!regex.test(gameCode.trim())) {
@@ -217,7 +241,10 @@ export default function ResultsPage({}: Props) {
         >
           Create your own game
         </Link>
-        <button className="p-3 rounded-2xl bg-green-700 hover:bg-green-800 text-center font-semibold cursor-pointer">
+        <button
+          onClick={handleShareResult}
+          className="p-3 rounded-2xl bg-green-700 hover:bg-green-800 text-center font-semibold cursor-pointer"
+        >
           Share the result
         </button>
       </div>
