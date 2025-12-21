@@ -10,9 +10,9 @@ type Props = {
 };
 
 const MIN_LIKES_COUNT = 1;
-const MAX_LIKES_COUNT = 5;
+const MAX_LIKES_COUNT = 3;
 const MIN_DISLIKES_COUNT = 1;
-const MAX_DISLIKES_COUNT = 5;
+const MAX_DISLIKES_COUNT = 3;
 
 function GameCreateSuccess({
   uniqueId,

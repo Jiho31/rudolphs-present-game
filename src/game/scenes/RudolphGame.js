@@ -2,7 +2,7 @@ import Phaser from "phaser";
 import { tempItems, items } from "../items.ts";
 import { EventBus } from "../EventBus.ts";
 
-const GAME_PLAY_TIME = 7000;
+const GAME_PLAY_TIME = 30000;
 const GAME_WIDTH = 365;
 const GAME_HEIGHT = 500;
 
@@ -73,11 +73,11 @@ export class RudolphGame extends Phaser.Scene {
 
     let star = this.stars.create(x, 16, item);
     star.name = item;
-    star.setDisplaySize(25, 25);
+    star.setDisplaySize(30, 30);
     star.setCollideWorldBounds(true);
 
-    const DROP_SPEED = 50;
-    star.setVelocity(0, DROP_SPEED);
+    // const DROP_SPEED = 100;
+    // star.setVelocity(0, DROP_SPEED);
   }
 
   spwanBomb(x, items = []) {
@@ -87,10 +87,10 @@ export class RudolphGame extends Phaser.Scene {
     let bomb = this.bombs.create(x, 16, item);
     bomb.name = item;
     bomb.setCollideWorldBounds(true);
-    bomb.setDisplaySize(25, 25);
+    bomb.setDisplaySize(30, 30);
 
-    const DROP_SPEED = 50; // bigger the value, faster drop
-    bomb.setVelocity(0, DROP_SPEED);
+    // const DROP_SPEED = 100; // bigger the value, faster drop
+    // bomb.setVelocity(0, DROP_SPEED);
   }
 
   handleGameOver() {

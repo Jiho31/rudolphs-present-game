@@ -21,7 +21,7 @@ const config: Phaser.Types.Core.GameConfig = {
   //   width: 1024,
   //   height: 768,
   parent: "game-container",
-  backgroundColor: "#028af8",
+  backgroundColor: "#A9A9A9",
   min: {
     width: GAME_WIDTH * (500 / GAME_HEIGHT),
     // width: 300,
@@ -36,7 +36,7 @@ const config: Phaser.Types.Core.GameConfig = {
     arcade: {
       gravity: {
         x: 0,
-        y: 150,
+        y: 80,
       },
       debug: false,
     },
