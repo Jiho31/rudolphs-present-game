@@ -96,7 +96,7 @@ export const items: Items = {
   },
   [itemKeys.CAROUSEL_HORSE]: {
     path: `${PATH}carousel-horse.svg`,
-    name: "amusement park",
+    name: "theme park",
   },
   [itemKeys.CAT]: {
     path: `${PATH}cat.svg`,
