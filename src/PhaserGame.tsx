@@ -12,6 +12,7 @@ import { useRouter } from "next/router";
 import { ItemKey, itemsIncludingPoop } from "./game/items";
 import Help from "@/components/icons/Help";
 import Instructions from "./components/Instructions";
+import { addGameResult } from "./_utils/useFirestore";
 
 export interface IRefPhaserGame {
   game: Phaser.Game | null;
@@ -118,7 +119,13 @@ export const PhaserGame = forwardRef<IRefPhaserGame, IProps>(
           console.error("Failed to save game result.");
           return;
         }
-        saveGameResult(data.score);
+        // saveGameResult(data.score);
+        const newResult = {
+          gameCode: gameId,
+          data: { player: playerName, score: data.score },
+        };
+        // await 로 호출?
+        addGameResult(newResult);
         setIsGameOver(true);
       });
 
