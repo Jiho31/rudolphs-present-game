@@ -1,3 +1,4 @@
+import { createGame } from "@/_utils/useFirestore";
 import { generateUniqueHash } from "@/_utils/utils";
 import { type Items, type ItemKey, items, Item } from "@/game/items";
 import Image from "next/image";
@@ -168,20 +169,25 @@ function GameCreateSteps({ setGameId, setCreatedBy }: Props) {
     setCurrentStep((prev) => prev + 1);
   };
 
-  const handleCreateGame = () => {
-    const uniqueId = generateUniqueHash();
-    const newGameData = {
-      name: nickname,
-      likes: selectedLikes,
-      dislikes: selectedDislikes,
-      result: [], // { player: 'anonymous', score: 5 }
-    };
+  const handleCreateGame = async () => {
+    try {
+      const uniqueId = generateUniqueHash();
+      const newGameData = {
+        name: nickname,
+        likes: selectedLikes,
+        dislikes: selectedDislikes,
+        results: [], // { player: 'anonymous', score: 5 }
+        creationDate: new Date().toISOString(),
+      };
 
-    // @todo save to db
-    localStorage.setItem(uniqueId, JSON.stringify(newGameData));
-    // console.log("saved!@@@@@", uniqueId, newGameData);
-    setGameId(uniqueId);
-    setCreatedBy(nickname);
+      localStorage.setItem(uniqueId, JSON.stringify(newGameData));
+      await createGame({ gameCode: uniqueId, data: newGameData });
+      // console.log("saved!@@@@@", uniqueId, newGameData);
+      setGameId(uniqueId);
+      setCreatedBy(nickname);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const handleItemClick = (
@@ -333,13 +339,6 @@ function GameCreateSteps({ setGameId, setCreatedBy }: Props) {
           <span className="text-black px-2 py-1 rounded-lg bg-green-100">
             {nickname}
           </span>
-          {/* <input
-            type="text"
-            id="nickname"
-            value={nickname}
-            readOnly
-            className="px-3 py-1 w-fit border-b border-green-100 "
-          /> */}
         </div>
 
         <p className="font-semibold">🎁 Your wishlist: </p>
@@ -347,7 +346,10 @@ function GameCreateSteps({ setGameId, setCreatedBy }: Props) {
           <p>Likes: {selectedLikes.length} items selected</p>
           <ul className="flex gap-2">
             {selectedLikes.map((key) => (
-              <li className="p-2 rounded-2xl text-center text-sm bg-green-100 text-black">
+              <li
+                key={key}
+                className="p-2 rounded-2xl text-center text-sm bg-green-100 text-black"
+              >
                 <Image
                   className="mx-auto"
                   src={itemOptions[key].path}
@@ -364,7 +366,10 @@ function GameCreateSteps({ setGameId, setCreatedBy }: Props) {
           <p>Dislikes: {selectedDislikes.length} items selected</p>
           <ul className="flex gap-2">
             {selectedDislikes.map((key) => (
-              <li className="p-2 rounded-2xl text-center text-sm bg-green-100 text-black">
+              <li
+                key={key}
+                className="p-2 rounded-2xl text-center text-sm bg-green-100 text-black"
+              >
                 <Image
                   className="mx-auto"
                   src={itemOptions[key].path}

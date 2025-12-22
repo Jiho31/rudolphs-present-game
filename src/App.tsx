@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { RudolphGame } from "./game/scenes/RudolphGame";
 import { MainMenu } from "./game/scenes/MainMenu";
 import { itemKeys } from "./game/items";
+import { fetchGame } from "./_utils/useFirestore";
 
 function App() {
   const router = useRouter();
@@ -17,7 +18,7 @@ function App() {
   const phaserRef = useRef<IRefPhaserGame | null>(null);
 
   useEffect(() => {
-    console.log(router.query.gameId);
+    // console.log(router.query.gameId);
     if (router.query.gameId && typeof router.query.gameId == "string") {
       setGameId(router.query.gameId);
     } else {
@@ -26,13 +27,26 @@ function App() {
   }, [router]);
 
   useEffect(() => {
-    const gameData = fetchGameData(gameId);
-    setGameData(gameData);
-    setFriendName(gameData.name || "Friend");
+    // const gameData = fetchGameData(gameId);
+    // setGameData(gameData);
+    // setFriendName(gameData.name || "Friend");
+
+    initGameSettings(gameId);
   }, [gameId]);
 
+  const initGameSettings = async (id: string) => {
+    try {
+      const data = await fetchGame(id);
+
+      setGameData(data);
+      setFriendName(data.name || "Friend");
+    } catch (err) {
+      return {};
+    }
+  };
+
   // local storage
-  const fetchGameData = (gameId: string) => {
+  /* const fetchGameData = async (gameId: string) => {
     if (!gameId) {
       // @todo handle game id invalid error
       // throw new Error("game id is invalid");
@@ -44,7 +58,7 @@ function App() {
       return {};
     }
     return JSON.parse(data);
-  };
+  }; */
 
   const validatePlayerName = (name: string) => {
     const regex = /^[\p{L}\p{N} _-]{1,20}$/u;
