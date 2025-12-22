@@ -2,7 +2,7 @@ import Phaser from "phaser";
 import { tempItems, items } from "../items.ts";
 import { EventBus } from "../EventBus.ts";
 
-const GAME_PLAY_TIME = 30000;
+const GAME_PLAY_TIME = 45000;
 const GAME_WIDTH = 365;
 const GAME_HEIGHT = 500;
 
