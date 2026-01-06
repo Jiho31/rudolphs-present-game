@@ -9,7 +9,7 @@ import {
   Timestamp,
   orderBy,
 } from "firebase/firestore";
-import { db as firebaseDB } from "../../firebase";
+import { db as firebaseDB } from "../lib/firebase";
 import { GameInformation, GameResult } from "@/types/types";
 
 const createGame = async ({
