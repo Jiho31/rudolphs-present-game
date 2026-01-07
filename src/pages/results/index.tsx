@@ -203,14 +203,10 @@ export default function ResultsPage({}: Props) {
       </div>
 
       <div className="w-full">
-        {/* <h2 className="text-xl font-semibold text-center">
-          {gameData.name || "User"}'s friends played:{" "}
-        </h2> */}
         <h2 className="text-2xl text-center text-green-500 font-semibold py-3">
           SCORE BOARD
         </h2>
         <ul className="w-full flex flex-col gap-2 p-2 rounded-2xl bg-white text-black">
-          {/* make sure to render a ordered list */}
           {gameData.results.map((item, index) => {
             return (
               <li
