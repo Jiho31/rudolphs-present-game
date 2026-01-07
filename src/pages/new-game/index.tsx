@@ -176,13 +176,12 @@ function GameCreateSteps({ setGameId, setCreatedBy }: Props) {
         name: nickname,
         likes: selectedLikes,
         dislikes: selectedDislikes,
-        results: [], // { player: 'anonymous', score: 5 }
+        // results: [], // { player: 'anonymous', score: 5 }
         creationDate: new Date().toISOString(),
       };
 
       localStorage.setItem(uniqueId, JSON.stringify(newGameData));
       await createGame({ gameCode: uniqueId, data: newGameData });
-      // console.log("saved!@@@@@", uniqueId, newGameData);
       setGameId(uniqueId);
       setCreatedBy(nickname);
     } catch (err) {
